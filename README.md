@@ -1,6 +1,6 @@
 # SVG Path
 
-This is a small library to normalise SVG paths according to the spec, and create polylines and dimensions based on those normalised paths.
+This is a small (WIP) library to normalise SVG paths according to the spec, and create polylines and dimensions based on those normalised paths.
 
 [![NPM version](https://img.shields.io/npm/v/@larsgw/svg-path.svg)](https://npmjs.org/package/@larsgw/svg-path)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
