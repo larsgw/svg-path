@@ -6,7 +6,7 @@ function reflectPoint ([x1, y1], [x2, y2]) {
   return [2 * x2 - x1, 2 * y2 - y1]
 }
 
-export function normalizeCommand (type, args, {pos, bezier, pathStart}) {
+export function normalizeCommand (type, args, { pos, bezier, pathStart }) {
   let out = {}
 
   switch (type) {

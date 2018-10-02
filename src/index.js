@@ -1,6 +1,6 @@
-import {normalizeCommand} from './normalizeCommand'
-import {commandToPolygon} from './commandToPolygon'
-import {normalizePolygonDirection} from './normalizePolygonDirection'
+import { normalizeCommand } from './normalizeCommand'
+import { commandToPolygon } from './commandToPolygon'
+import { normalizePolygonDirection } from './normalizePolygonDirection'
 
 const commands = {
   M: 2,
@@ -55,7 +55,7 @@ export class SvgPath {
     }
     let bezier = {
       cubic: [0, 0],
-      quadratic:[0, 0]
+      quadratic: [0, 0]
     }
     let pathStart
 
@@ -71,7 +71,7 @@ export class SvgPath {
 
       for (let i = 0; i < totalCalls; i++) {
         let args = command.args.slice(i * numOfArgs, (i + 1) * numOfArgs)
-        let out = SvgPath.normalizeCommand(command.type, args, {pos, bezier, pathStart})
+        let out = SvgPath.normalizeCommand(command.type, args, { pos, bezier, pathStart })
 
         pos.prev = out.pos
         pathStart = false

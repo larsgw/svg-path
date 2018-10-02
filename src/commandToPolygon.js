@@ -40,7 +40,7 @@ function getEllipse (prev, next, rx, ry, rotation, negate) {
   let x0 = x1 - rx * Math.cos(t1)
   let y0 = y1 - ry * Math.sin(t1)
 
-  return {x: x0, y: y0, a: rx, b: ry, arcStart: t1, arcEnd: t2}
+  return { x: x0, y: y0, a: rx, b: ry, arcStart: t1, arcEnd: t2 }
 }
 
 function getBinomial (n, k) {
@@ -155,6 +155,6 @@ const commands = {
   }
 }
 
-export function commandToPolygon ({type, args}, prev) {
+export function commandToPolygon ({ type, args }, prev) {
   return commands[type](args.slice(), prev)
 }
