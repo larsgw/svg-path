@@ -1,0 +1,22 @@
+{
+  "name": "@larsgw/svg-path",
+  "version": "0.1.0",
+  "description": "Parse, normalise and create polylines with SVG paths",
+  "main": "lib/index.js",
+  "files": ["/lib"],
+  "scripts": {
+    "babel": "babel src -d lib"
+  },
+  "keywords": [
+    "svg",
+    "path"
+  ],
+  "author": "Lars Willighagen",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.0"
+  }
+}
