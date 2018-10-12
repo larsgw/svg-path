@@ -1,8 +1,9 @@
 import { normalizeCommand } from './normalizeCommand'
 import { commandToPolygon } from './commandToPolygon'
 import { normalizePolygonDirection } from './normalizePolygonDirection'
+import { stringify } from './stringify'
 
-const commands = {
+export const commands = {
   M: 2,
   Z: 0,
   L: 2,
@@ -149,5 +150,17 @@ export class SvgPath {
         ymax
       }
     })
+  }
+
+  stringify () {
+    if (!this.normalizedPath) {
+      this.normalize()
+    }
+
+    return stringify(this.normalizedPath || this.path)
+  }
+
+  toString () {
+    return this.stringify()
   }
 }

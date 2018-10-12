@@ -65,6 +65,16 @@ path.getDimensions()
 
 Get dimensions based on the polygons mentioned above, one set per polygon.
 
+### Stringify
+
+```js
+path.stringify()
+
+// 'M0,0 L10,0 L20,0 A15,15 1 0 1 0,0'
+```
+
+Stringify a path. It will be possible to configure these in the future.
+
 ### Helper functions
 
   * `SvgPath.parsePath(string path)` - parse path into list of type/args pairs. splits up chain calls
