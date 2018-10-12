@@ -86,6 +86,8 @@ export class SvgPath {
     }).reduce((acc, arr) => {
       return acc.concat(arr)
     }, [])
+
+    return this.normalizedPath
   }
 
   getPolygons () {
