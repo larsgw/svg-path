@@ -15,19 +15,19 @@ This is a small (WIP) library to normalise SVG paths according to the spec, and 
 ```js
 let {SvgPath} = require('@larsgw/svg-path')
 
-let path = new SvgPath('M0 0 10 0h20 a15 15,1,0,0,-30 0')
+let path = new SvgPath('M0 0 10 0h20 a15 15,1,0,1,-30 0')
 ```
 
 ### Normalise
 
 ```js
-path.normalise()
+path.normalize()
 
 // [
 //   {type: 'M', args: [0, 0]},
 //   {type: 'L', args: [10, 0]},
 //   {type: 'L', args: [30, 0]},
-//   {type: 'A', args: [15, 15, 1, 0, 0, -30, 0]}
+//   {type: 'A', args: [15, 15, 1, 0, 1, 0, 0]}
 // ]
 ```
 
