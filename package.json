@@ -19,8 +19,7 @@
   "scripts": {
     "babel": "babel src -d lib",
     "lint": "standard src/**/*.js",
-    "mocha": "mocha -R dot -r @babel/register test/*.spec.js",
-    "test": "npm run lint && npm run mocha"
+    "test": "mocha -R dot -r @babel/register test/*.spec.js"
   },
   "keywords": [
     "svg",
