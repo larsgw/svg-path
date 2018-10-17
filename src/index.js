@@ -1,6 +1,6 @@
 import { normalizeCommand } from './normalizeCommand'
 import { commandToPolygon } from './commandToPolygon'
-import { normalizePolygonDirection } from './normalizePolygonDirection'
+import { normalizePolygon } from './normalizePolygon'
 import { stringify } from './stringify'
 
 export const commands = {
@@ -118,7 +118,7 @@ export class SvgPath {
       return polygons
     }, [])
 
-    this.polygons = polygons.map(normalizePolygonDirection)
+    this.polygons = polygons.map(normalizePolygon)
 
     return this.polygons
   }
