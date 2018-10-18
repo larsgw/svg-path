@@ -19,7 +19,7 @@
   "scripts": {
     "babel": "babel src -d lib",
     "lint": "standard src/**/*.js",
-    "test": "mocha -R dot -r @babel/register test/*.spec.js",
+    "test": "mocha -r @babel/register test/*.spec.js",
     "preversion": "npm run lint && npm run test",
     "prepublishOnly": "npm run babel"
   },

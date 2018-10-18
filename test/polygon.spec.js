@@ -13,7 +13,7 @@ describe('SvgPath#getPolygons()', function () {
   describe('normalization', function () {
     it('with simple intersection', function () {
       assert.deepStrictEqual(
-        normalizePolygon(toPolygon('100,0 0,100 0,100 100,100')),
+        normalizePolygon(toPolygon('100,0 0,100 100,100')),
         toPolygon('100,0 50,50 100,100 0,100 50,50')
       )
     })
@@ -27,6 +27,24 @@ describe('SvgPath#getPolygons()', function () {
       assert.deepStrictEqual(
         normalizePolygon(toPolygon('50,0 50,150 0,100 100,100 100,50 0,50')),
         toPolygon('50,0 50,50 100,50 100,100 50,100 50,150 0,100 50,150 50,50 0,50')
+      )
+    })
+    it('with multiple intersections in same point', function () {
+      assert.deepStrictEqual(
+        normalizePolygon(toPolygon('50,0 50,100 0,100 100,0 100,100')),
+        toPolygon('50,0 50,50 100,0 100,100 50,50 50,100 0,100 50,50')
+      )
+    })
+    it('with point intersection', function () {
+      assert.deepStrictEqual(
+        normalizePolygon(toPolygon('50,0 50,100 100,50 50,50 0,50')),
+        toPolygon('50,0 50,50 100,50 50,100 50,50 0,50')
+      )
+    })
+    it('with point-point intersection', function () {
+      assert.deepStrictEqual(
+        normalizePolygon(toPolygon('50,0 50,50 50,100 100,50 50,50 0,50')),
+        toPolygon('50,0 50,50 100,50 50,100 50,50 0,50')
       )
     })
     it('with segment intersection (diff direction)', function () {
@@ -64,6 +82,18 @@ describe('SvgPath#getPolygons()', function () {
         normalizePolygon(toPolygon('100,50 100,75 100,100 0,50 100,50 100,75 100,100 0,100')),
         toPolygon('100,50 0,50 100,100 100,75 100,50 100,75 100,100 0,100')
       )
+    })
+    it('with point-segment non-intersection', function () {
+      let polygon = toPolygon('100,0 100,100 0,100 100,50')
+      assert.deepStrictEqual(normalizePolygon(polygon), polygon)
+    })
+    it('with point-point non-intersection', function () {
+      let polygon = toPolygon('100,0 100,50 100,100 0,100 100,50')
+      assert.deepStrictEqual(normalizePolygon(polygon), polygon)
+    })
+    it('with segment-segment non-intersection', function () {
+      let polygon = toPolygon('100,0 100,100 0,100 100,75 100,25')
+      assert.deepStrictEqual(normalizePolygon(polygon), polygon)
     })
   })
 })
