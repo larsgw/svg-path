@@ -3,6 +3,7 @@
 This is a small (WIP) library to normalise SVG paths according to the spec, and create polylines and dimensions based on those normalised paths.
 
 [![NPM version](https://img.shields.io/npm/v/@larsgw/svg-path.svg)](https://npmjs.org/package/@larsgw/svg-path)
+[![Build Status](https://travis-ci.org/larsgw/svg-path.svg?branch=master)](https://travis-ci.org/larsgw/svg-path)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![license](https://img.shields.io/github/license/larsgw/citation.js.svg)](https://github.com/larsgw/citation.js/blob/master/LICENSE.md)
 
