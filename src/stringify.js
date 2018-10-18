@@ -55,5 +55,5 @@ export function stringify (commands) {
 
       return `${type}${calls.join(', ')}`
     })
-    .join(delimiter)
+    .join(' ')
 }
