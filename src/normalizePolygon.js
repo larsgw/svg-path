@@ -162,18 +162,18 @@ export function removePolygonIntersections (polygon) {
   const applyTransform = (i, [b, d]) => i >= d ? i + 2 : i >= b ? b + d - i - 1 : i
 
   for (let [point, a, c] of intersections) {
-    a = indexTransforms.reduce(applyTransform, a)
-    c = indexTransforms.reduce(applyTransform, c)
-    let b = a + 1
-    let d = c + 1
+    let b = indexTransforms.reduce(applyTransform, a) + 1
+    let d = indexTransforms.reduce(applyTransform, c) + 1
+    let min = Math.min(b, d)
+    let max = Math.max(d, b)
     polygon = [
-      ...polygon.slice(0, b),
+      ...polygon.slice(0, min),
       point,
-      ...polygon.slice(b, d).reverse(),
+      ...polygon.slice(min, max).reverse(),
       point,
-      ...polygon.slice(d)
+      ...polygon.slice(max)
     ]
-    indexTransforms.push([b, d])
+    indexTransforms.push([min, max])
   }
   return polygon
 }
