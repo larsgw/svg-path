@@ -128,17 +128,16 @@ export function removeRedundantPoints (polygon) {
       return false
     }
 
-    if (i === polygon.length - 1) {
+    return true
+  }).filter(([bx, by], i, polygon) => {
+    if (i === 0 || i === polygon.length - 1) {
       return true
     }
 
     // redundant points (point of 180deg)
-    let [xn, yn] = polygon[i + 1]
-    if (((xp - x) / (yp - y)) === ((x - xn) / (y - yn))) {
-      return false
-    }
-
-    return true
+    let [ax, ay] = polygon[i - 1]
+    let [cx, cy] = polygon[i + 1]
+    return Math.abs(Math.atan2(bx - ax, by - ay) - Math.atan2(cx - bx, cy - by))
   })
 }
 
