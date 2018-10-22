@@ -73,7 +73,7 @@ describe('SvgPath#getPolygons()', function () {
     it('with multi-segment intersection (diff direction)', function () {
       assertNormalization(
         '50,50 50,75 50,100 100,150 50,200 0,150 50,100 50,75 50,50 100,0',
-        '100,0 50,50 50,75 50,100 100,150 50,200 0,150 50,100 50,75 50,50'
+        '100,0 50,50 50,100 100,150 50,200 0,150 50,100 50,50'
       )
     })
     it('with segment intersection (same direction)', function () {
@@ -91,7 +91,7 @@ describe('SvgPath#getPolygons()', function () {
     it('with multi-segment intersection (same direction)', function () {
       assertNormalization(
         '100,50 100,75 100,100 0,50 100,50 100,75 100,100 0,100',
-        '100,50 0,50 100,100 100,75 100,50 100,75 100,100 0,100'
+        '100,50 0,50 100,100 100,50 100,100 0,100'
       )
     })
     it('with point-segment non-intersection', function () {
@@ -99,8 +99,11 @@ describe('SvgPath#getPolygons()', function () {
       assertNormalization(polygon, polygon)
     })
     it('with point-point non-intersection', function () {
-      let polygon = '100,0 100,50 100,100 0,100 100,50'
-      assertNormalization(polygon, polygon)
+      let polygon =
+      assertNormalization(
+        '100,0 100,50 100,100 0,100 100,50',
+        '100,0 100,100 0,100 100,50'
+      )
     })
     it('with segment-segment non-intersection', function () {
       let polygon = '100,0 100,100 0,100 100,75 100,25'
