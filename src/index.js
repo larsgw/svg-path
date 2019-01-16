@@ -32,6 +32,12 @@ export class SvgPath {
 
       if (!commands.hasOwnProperty(key)) {
         throw new SyntaxError(`Invalid SVG path command: "${type}"`)
+      } else if (commands[key] !== 0 && args.length % commands[key] !== 0) {
+        throw new SyntaxError(`Invalid number of parameters to SVG path command "${type}": got ${args.length}, expected a multiple of ${commands[key]}`)
+      } else if (commands[key] === 0 && args.length !== 0) {
+        throw new SyntaxError(`Invalid number of parameters to SVG path command "${type}": got ${args.length}, expected 0`)
+      } else if (args.some(arg => isNaN(arg))) {
+        throw new SyntaxError(`Invalid parameter to SVG path command "${type}" (parameter ${args.findIndex(arg => isNaN(arg))}): expected number, got NaN`)
       }
 
       return { type, key, args }
