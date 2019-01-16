@@ -27,17 +27,14 @@ export class SvgPath {
     return path.trim().split(/(?!^)\s*(?=[a-df-z])/i).map((command) => {
       let type = command[0]
       let key = type.toUpperCase()
-      let data = command.slice(1)
+      let data = command.slice(1).trim()
+      let args = data ? data.split(/\s*,\s*|\s+|(?=-)/g).map(parseFloat) : []
 
       if (!commands.hasOwnProperty(key)) {
         throw new SyntaxError(`Invalid SVG path command: "${type}"`)
       }
 
-      return {
-        type,
-        key,
-        args: data.trim().split(/\s*,\s*|\s+|(?=-)/g).map(parseFloat)
-      }
+      return { type, key, args }
     })
   }
 
