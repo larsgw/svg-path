@@ -13,12 +13,54 @@ function toString (polygon) {
   return polygon.map(point => point.join('\t')).join('\n')
 }
 
+function assertParse (a, b) {
+  assert.deepStrictEqual(SvgPath.parsePath(a), b)
+}
+
 function assertNormalization (a, b) {
   assert.strictEqual(
     toString(normalizePolygon(toPolygon(a))),
     toString(toPolygon(b))
   )
 }
+
+describe('SvgPath.parsePath()', function () {
+  it('with param space separator', function () {
+    assertParse('m 100 100', [{type: 'm', key: 'M', args: [100, 100]}])
+  })
+  it('with param comma separator', function () {
+    assertParse('m 100,100', [{type: 'm', key: 'M', args: [100, 100]}])
+  })
+  it('with param comma and space separator', function () {
+    assertParse('m 100 , 100', [{type: 'm', key: 'M', args: [100, 100]}])
+  })
+  it('with sign number and no separator', function () {
+    assertParse('m 100-100', [{type: 'm', key: 'M', args: [100, -100]}])
+    assertParse('m 100+100', [{type: 'm', key: 'M', args: [100, 100]}])
+  })
+  it('with decimal number', function () {
+    assertParse('m 100.0 100', [{type: 'm', key: 'M', args: [100, 100]}])
+    assertParse('m 100. 100', [{type: 'm', key: 'M', args: [100, 100]}])
+    assertParse('m .1 100', [{type: 'm', key: 'M', args: [0.1, 100]}])
+  })
+  it('with signed number', function () {
+    assertParse('m -100 100', [{type: 'm', key: 'M', args: [-100, 100]}])
+    assertParse('m +100 100', [{type: 'm', key: 'M', args: [100, 100]}])
+  })
+  it('with exponent', function () {
+    assertParse(
+      'm 10e1,100e0',
+      [{type: 'm', key: 'M', args: [100, 100]}]
+    )
+  })
+  it('with signed exponent', function () {
+    assertParse('m 1000e-1,100e-0', [{type: 'm', key: 'M', args: [100, 100]}])
+    assertParse('m 10e+1,100e+0', [{type: 'm', key: 'M', args: [100, 100]}])
+  })
+  it('everything bagel (or number)', function () {
+    assertParse('m +1.1e1 -.1e+01', [{type: 'm', key: 'M', args: [11, -1]}])
+  })
+})
 
 describe('SvgPath#getPolygons()', function () {
   describe('normalization', function () {
