@@ -146,24 +146,57 @@ export function getPolygonIntersections (polygon) {
 }
 
 export function removePolygonIntersections (polygon) {
-  const original = polygon.slice()
   let intersections = getPolygonIntersections(polygon)
 
+  // Keep a reference to lookup indices later on, when polygon itself has
+  // already changed. Doing this by hand instead of indexOf did not work well.
+  const original = polygon.slice()
+
+  // Create a 'list' of points to insert at each index. These points cannot be
+  // inserted directly, as they have to be sorted to avoid annoying edge-cases
+  // with multiple intersections in the same segment.
+  //
+  // Each intersection is a pair of two points, one for each segment of the two
+  // that cross. There are no special cases for intersections with more than two
+  // segments, so they are treated as n! intersections (and thus 2 * n! points),
+  // n being the number of segments intersecting.
+  //
+  // `points` is an object with indices in the original array as keys, and a
+  // list of half intersections as value. The index is that of the first
+  // point of the segment that the intersection half should be inserted into.
+  // Each half intersection has the following data:
+  //
+  //     [x, y, end, ref]
+  //
+  // Here, `x` and `y` are the coordinates of the intersections, `end` is a
+  // Boolean to show whether or not it's the second half, and ref is a reference
+  // to the original object for index lookup.
   let pointsToInsert = intersections.reduce((points, [point, a, c], i) => {
     if (!points[a]) { points[a] = [] }
     if (!points[c]) { points[c] = [] }
 
-    points[a].push([...point, -1, point])
-    points[c].push([...point, 1, point])
+    points[a].push([...point, false, point])
+    points[c].push([...point, true, point])
 
     return points
   }, {})
 
+  // Insert intersections, which gives the polygon the ability to turn at points
+  // where it once had to cross itself. The points for each index are sorted by
+  // their distance to the first point in their segment (so basically the order
+  // they would be in before the polygon gets shuffled), then by if they are the
+  // first point in an intersection pair.
   for (let index in pointsToInsert) {
     let points = pointsToInsert[index].sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2])
     polygon.splice(polygon.indexOf(original[+index + 1]), 0, ...points)
   }
 
+  // Now, reverse the parts between each pair of points of an intersection. This
+  // essentially removes the intersection, really useful.
+  //
+  // First off, determine where those two points are, as they may have moved.
+  // Then, after removing some metadata required for earlier steps, reverse the
+  // points in between.
   for (let [intersection] of intersections) {
     const [min, max] = polygon.reduce((array, point, index) => (point[3] === intersection && array.push(index), array), [])
 
