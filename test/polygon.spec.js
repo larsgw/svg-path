@@ -3,7 +3,7 @@
 import assert from 'assert'
 
 import {SvgPath} from '../src/'
-import {normalizePolygon} from '../src/normalizePolygon'
+import {normalizePolygon, getPolygonIntersections} from '../src/normalizePolygon'
 
 function toPolygon (string) {
   return [[0, 0], ...string.split(' ').map(string => string.split(',').map(parseFloat)), [0, 0]]
@@ -21,6 +21,10 @@ function assertNormalization (a, b) {
   assert.strictEqual(
     toString(normalizePolygon(toPolygon(a))),
     toString(toPolygon(b))
+  )
+  assert.deepStrictEqual(
+    getPolygonIntersections(normalizePolygon(toPolygon(a))),
+    []
   )
 }
 
