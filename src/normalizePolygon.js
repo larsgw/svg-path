@@ -134,10 +134,10 @@ export function getPolygonIntersections (polygon) {
             indefinite = undefined
           }
         } else {
-          indefinite = [intersection, a, c, 'a']
+          indefinite = [intersection, a, c]
         }
       } else {
-        intersections.push([intersection, a, c, 'b'])
+        intersections.push([intersection, a, c])
       }
     }
   }
@@ -146,35 +146,37 @@ export function getPolygonIntersections (polygon) {
 }
 
 export function removePolygonIntersections (polygon) {
+  const original = polygon.slice()
   let intersections = getPolygonIntersections(polygon)
-  // line segment index info changes :(
-  let indexTransforms = []
-  // takes an index (i) and previous intersection-removing bounds (b, d)
-  // if i >= d (upper bound), only the two added points are taken into account
-  // if i < b (lower bound), the index stays the same
-  // else, if d > i >= b (between bounds)
-  //   a. new i is a + the distance between (i, d)           : b - 1 + (d - i)
-  //   b. one extra point is added                           : b + (d - i)
-  //   c. points are reversed so i, being the first point of : b + (d - i) -1
-  //      a line segment is now the second point. To get the
-  //      new one denoting the line segment, it's i - 1
-  //   This evaluates to                                     : b + d - i - 1
-  const applyTransform = (i, [b, d]) => i >= d ? i + 2 : i >= b ? b + d - i - 1 : i
 
-  for (let [point, a, c] of intersections) {
-    let b = indexTransforms.reduce(applyTransform, a) + 1
-    let d = indexTransforms.reduce(applyTransform, c) + 1
-    let min = Math.min(b, d)
-    let max = Math.max(d, b)
+  let pointsToInsert = intersections.reduce((points, [point, a, c], i) => {
+    if (!points[a]) { points[a] = [] }
+    if (!points[c]) { points[c] = [] }
+
+    points[a].push([...point, -1, point])
+    points[c].push([...point, 1, point])
+
+    return points
+  }, {})
+
+  for (let index in pointsToInsert) {
+    let points = pointsToInsert[index].sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2])
+    polygon.splice(polygon.indexOf(original[+index + 1]), 0, ...points)
+  }
+
+  for (let [intersection] of intersections) {
+    const [min, max] = polygon.reduce((array, point, index) => (point[3] === intersection && array.push(index), array), [])
+
+    polygon[min].splice(2)
+    polygon[max].splice(2)
+
     polygon = [
-      ...polygon.slice(0, min),
-      point,
-      ...polygon.slice(min, max).reverse(),
-      point,
+      ...polygon.slice(0, min + 1),
+      ...polygon.slice(min + 1, max).reverse(),
       ...polygon.slice(max)
     ]
-    indexTransforms.push([min, max])
   }
+
   return polygon
 }
 
