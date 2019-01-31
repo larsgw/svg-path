@@ -5,12 +5,16 @@ import assert from 'assert'
 import {SvgPath} from '../src/'
 import {normalizePolygon, getPolygonIntersections} from '../src/normalizePolygon'
 
+function toShortNum (num) {
+  return Math.round(num) === num ? num : num.toFixed(5)
+}
+
 function toPolygon (string) {
-  return [[0, 0], ...string.split(' ').map(string => string.split(',').map(parseFloat)), [0, 0]]
+  return [[0, 0], ...string.split(/\s+/).map(string => string.split(',').map(parseFloat)), [0, 0]]
 }
 
 function toString (polygon) {
-  return polygon.map(point => point.join('\t')).join('\n')
+  return polygon.map(point => point.map(toShortNum).join('\t')).join('\n')
 }
 
 function assertParse (a, b) {
@@ -168,6 +172,21 @@ describe('SvgPath#getPolygons()', function () {
     it('with segment-segment non-intersection', function () {
       let polygon = '100,0 100,100 0,100 100,75 100,25'
       assertNormalization(polygon, polygon)
+    })
+
+    it('pentagram', function () {
+      const corners = [
+        '50,30',
+        `${500 / 7},${300 / 7}`,
+        `${200 / 3},${200 / 3}`,
+        `${300 / 7},${500 / 7}`,
+        '30,50'
+      ]
+      assertNormalization(
+        '100,60 0,80 80,0 60,100',
+        `${corners[0]} ${corners[4]} ${corners[3]} ${corners[2]} ${corners[1]}
+         ${corners[0]} 80,0 ${corners[1]} 100,60 ${corners[2]} 60,100 ${corners[3]} 0,80 ${corners[4]}`
+      )
     })
   })
 })
