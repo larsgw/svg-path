@@ -96,9 +96,21 @@ export function getPolygonIntersections (polygon) {
       let b = a + 1
       let intersection = getCachedIntersection(polygon[c], polygon[d], caches[a])
 
-      // no or infinite intersection
-      if (intersection === false || intersection === true) {
+      // no intersection
+      if (intersection === false) {
         continue
+      }
+
+      // infinite intersections, could still be a single intersection if the lines
+      // intersect head-on
+      if (intersection === true) {
+        if (isSamePoint(polygon[b], polygon[c])) {
+          intersection = polygon[c].slice()
+        } else if (isSamePoint(polygon[b], polygon[d])) {
+          intersection = polygon[d].slice()
+        } else {
+          continue
+        }
       }
 
       // intersection is between begin and endpoint of polygon, and polygon
@@ -118,8 +130,7 @@ export function getPolygonIntersections (polygon) {
       }
 
       // no definitive intersection
-      if ((isSamePoint(intersection, polygon[a]) && isSamePoint(polygon[a], polygon[c])) ||
-          (isSamePoint(intersection, polygon[a]) && isSamePoint(polygon[a], polygon[d]))) {
+      if (isSamePoint(polygon[a], polygon[c]) || isSamePoint(polygon[a], polygon[d])) {
         continue
       } else if (!isBetweenPoints(intersection, polygon[a], polygon[b]) ||
                  !isBetweenPoints(intersection, polygon[c], polygon[d])) {

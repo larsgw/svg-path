@@ -18,12 +18,14 @@ function assertParse (a, b) {
 }
 
 function assertNormalization (a, b) {
+  const normalized = normalizePolygon(toPolygon(a))
+
   assert.strictEqual(
-    toString(normalizePolygon(toPolygon(a))),
+    toString(normalized),
     toString(toPolygon(b))
   )
   assert.deepStrictEqual(
-    getPolygonIntersections(normalizePolygon(toPolygon(a))),
+    getPolygonIntersections(normalized),
     []
   )
 }
