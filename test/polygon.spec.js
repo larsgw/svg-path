@@ -94,6 +94,12 @@ describe('SvgPath#getPolygons()', function () {
         '100,0 20,20 80,80 100,0 100,100 80,80 75,100 0,25 20,20'
       )
     })
+    it('with multiple (reverse) intersections in same (reverse) segment', function () {
+      assertNormalization(
+        '-100,-100 -100,0 -75,-100 0,-25 -100,0',
+        '-100,0 -20,-20 -80,-80 -100,0 -100,-100 -80,-80 -75,-100 0,-25 -20,-20'
+      )
+    })
     it('with multiple intersections in same point', function () {
       assertNormalization(
         '50,0 50,100 0,100 100,0 100,100',

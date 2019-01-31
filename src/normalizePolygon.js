@@ -198,7 +198,9 @@ export function removePolygonIntersections (polygon) {
   // they would be in before the polygon gets shuffled), then by if they are the
   // first point in an intersection pair.
   for (let index in pointsToInsert) {
-    let points = pointsToInsert[index].sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2])
+    const c = original[index]
+    const dist = ([x, y]) => Math.hypot(c[0] - x, c[1] - y)
+    let points = pointsToInsert[index].sort((a, b) => dist(a) - dist(b) || a[2] - b[2])
     polygon.splice(polygon.indexOf(original[+index + 1]), 0, ...points)
   }
 
